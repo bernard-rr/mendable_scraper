@@ -36,6 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.isValidYoutubeURL = exports.youtubeVideoScraper = void 0;
 var youtube_transcript_1 = require("youtube-transcript");
 function youtubeVideoScraper(url) {
     return __awaiter(this, void 0, void 0, function () {
@@ -72,10 +73,12 @@ function youtubeVideoScraper(url) {
         });
     });
 }
+exports.youtubeVideoScraper = youtubeVideoScraper;
 function isValidYoutubeURL(url) {
-    var youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/watch\?v=[^&]+/;
+    var youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/(watch\?v=[^&]+|[A-Za-z0-9_-]+)/;
     return youtubeRegex.test(url);
 }
+exports.isValidYoutubeURL = isValidYoutubeURL;
 // Example Usage
-var videoURL = 'https://www.youtube.com/watch?v=rYMTSfL_kTk';
+var videoURL = 'youtube.com/watch?v=wHEIT32ZEVs';
 youtubeVideoScraper(videoURL).then(console.log).catch(console.error);

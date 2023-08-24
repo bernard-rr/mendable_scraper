@@ -5,7 +5,7 @@ type VideoScraperResult = {
     source: string;
 };
 
-async function youtubeVideoScraper(url: string): Promise<VideoScraperResult> {
+export async function youtubeVideoScraper(url: string): Promise<VideoScraperResult> {
     // Validate YouTube URL format
     if (!isValidYoutubeURL(url)) {
         throw new Error('Invalid YouTube URL provided.');
@@ -31,11 +31,11 @@ async function youtubeVideoScraper(url: string): Promise<VideoScraperResult> {
     }
 }
 
-function isValidYoutubeURL(url: string): boolean {
-    const youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/watch\?v=[^&]+/;
+export function isValidYoutubeURL(url: string): boolean {
+    const youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/(watch\?v=[^&]+|[A-Za-z0-9_-]+)/;
     return youtubeRegex.test(url);
 }
 
 // Example Usage
-const videoURL = 'https://www.youtube.com/watch?v=rYMTSfL_kTk';
+const videoURL = 'youtube.com/watch?v=wHEIT32ZEVs';
 youtubeVideoScraper(videoURL).then(console.log).catch(console.error);
