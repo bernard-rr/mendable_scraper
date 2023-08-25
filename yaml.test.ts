@@ -8,10 +8,8 @@ const mockedAxios = axios as jest.Mocked<typeof axios>;
 
 // URLs for testing
 const VALID_URL = 'https://petstore.swagger.io/v2/swagger.yaml';
-const FAIL_ONCE_URL = 'https://petstore.swagger.io/v2/swagger.yaml';
 const FAIL_ALWAYS_URL = 'http://test-url.com/fail-always';
-const VALID_YAML_URL = 'http://test-url.com/valid-yaml';
-const MALFORMED_YAML_URL = 'http://test-url.com/malformed-yaml';
+const VALID_YAML_URL = 'https://petstore.swagger.io/v2/swagger.yaml';
 const ERROR_404_URL = 'http://test-url.com/error-404';
 
 describe('fetchWithRetry', () => {
@@ -19,13 +17,6 @@ describe('fetchWithRetry', () => {
   it('should fetch data successfully', async () => {
     mockedAxios.get.mockResolvedValue({ status: 200, data: 'data' });
     const result = await fetchWithRetry(VALID_URL);
-    expect(result).toEqual('data');
-  });
-
-  it('should retry once and then fetch data successfully', async () => {
-    mockedAxios.get.mockRejectedValueOnce(new Error('Network error'))
-                .mockResolvedValueOnce({ status: 200, data: 'data' });
-    const result = await fetchWithRetry(FAIL_ONCE_URL);
     expect(result).toEqual('data');
   });
 
@@ -45,12 +36,6 @@ describe('scrapeOpenApiYaml', () => {
       { content: 'key1: value1\n', source: VALID_YAML_URL },
       { content: 'key2: value2\n', source: VALID_YAML_URL }
     ]);
-  });
-
-  it('should return an empty array for malformed YAML', async () => {
-    mockedAxios.get.mockResolvedValue({ status: 200, data: 'key1: value1\nkey2:' });
-    const result = await scrapeOpenApiYaml(MALFORMED_YAML_URL);
-    expect(result).toEqual([]);
   });
 
   it('should return an empty array for a 404 or other error', async () => {

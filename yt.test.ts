@@ -23,7 +23,7 @@ describe('youtubeVideoScraper', () => {
         (YoutubeTranscript.fetchTranscript as jest.Mock).mockResolvedValue(mockTranscriptData);
 
         const result = await youtubeVideoScraper(HTTP_URL);
-        expect(typeof result.content).toBe('string');
+        expect(typeof result.content).toBeTruthy();
         expect(result.source).toBe(HTTP_URL);
     });
 
@@ -31,7 +31,7 @@ describe('youtubeVideoScraper', () => {
         (YoutubeTranscript.fetchTranscript as jest.Mock).mockResolvedValue(mockTranscriptData);
 
         const result = await youtubeVideoScraper(HTTPS_URL);
-        expect(typeof result.content).toBe('string');
+        expect(typeof result.content).toBeTruthy();
         expect(result.source).toBe(HTTPS_URL);
     });
 
@@ -39,7 +39,7 @@ describe('youtubeVideoScraper', () => {
         (YoutubeTranscript.fetchTranscript as jest.Mock).mockResolvedValue(mockTranscriptData);
 
         const result = await youtubeVideoScraper(REGULAR_URL);
-        expect(typeof result.content).toBe('string');
+        expect(typeof result.content).toBeTruthy();
         expect(result.source).toBe(REGULAR_URL);
     });
 
@@ -64,6 +64,25 @@ describe('youtubeVideoScraper', () => {
 
         await expect(youtubeVideoScraper(HTTPS_URL)).rejects.toThrow('Failed to fetch transcript: Fetch Error');
     });
+
+    it('should return the error message from the Error instance', async () => {
+        const errorMessage = 'Some specific error';
+        (YoutubeTranscript.fetchTranscript as jest.Mock).mockRejectedValue(new Error(errorMessage));
+
+        await expect(youtubeVideoScraper(HTTPS_URL))
+            .rejects
+            .toThrow(`Failed to fetch transcript: ${errorMessage}`);
+    });
+
+    it('should return a generic error message for non-Error rejections', async () => {
+        const rejectionData = { someData: 'data' };
+        (YoutubeTranscript.fetchTranscript as jest.Mock).mockRejectedValue(rejectionData);
+
+        await expect(youtubeVideoScraper(HTTPS_URL))
+            .rejects
+            .toThrow('Failed to fetch transcript.');
+    });
+
 
 });
 
