@@ -2,5 +2,5 @@
 node_modules/
 
 # Ignore TypeScript compiled files
-*.js
-*.js.map
+**/*.js
+**/*.js.map
