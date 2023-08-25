@@ -1,5 +1,7 @@
-{
+  {
   "compilerOptions": {
+    "typeRoots": ["./types", "./node_modules/@types"],
+    "types": ["selenium-webdriver", "jest", "node"],
     /* Visit https://aka.ms/tsconfig to read more about this file */
 
     /* Projects */

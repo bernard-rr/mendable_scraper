@@ -36,6 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.scrapeOpenApiYaml = exports.fetchWithRetry = void 0;
 var axios_1 = require("axios");
 var yaml = require("js-yaml");
 function fetchWithRetry(url, retries) {
@@ -64,6 +65,7 @@ function fetchWithRetry(url, retries) {
         });
     });
 }
+exports.fetchWithRetry = fetchWithRetry;
 function scrapeOpenApiYaml(url) {
     return __awaiter(this, void 0, void 0, function () {
         var data, parsedYaml_1, sections, error_2;
@@ -92,6 +94,7 @@ function scrapeOpenApiYaml(url) {
         });
     });
 }
+exports.scrapeOpenApiYaml = scrapeOpenApiYaml;
 // Testing the scraper
 scrapeOpenApiYaml('https://github.com/OAI/OpenAPI-Specification/blob/main/examples/v3.0/api-with-examples.yaml').then(function (sections) {
     console.log(JSON.stringify(sections, null, 2));

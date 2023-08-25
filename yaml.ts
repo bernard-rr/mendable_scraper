@@ -11,7 +11,7 @@ interface YamlObject {
   [key: string]: any;
 }
 
-async function fetchWithRetry(url: string, retries: number = 3): Promise<string> {
+export async function fetchWithRetry(url: string, retries: number = 3): Promise<string> {
   try {
     const response = await axios.get(url);
 
@@ -27,7 +27,7 @@ async function fetchWithRetry(url: string, retries: number = 3): Promise<string>
   }
 }
 
-async function scrapeOpenApiYaml(url: string): Promise<Section[]> {
+export async function scrapeOpenApiYaml(url: string): Promise<Section[]> {
   try {
     // Fetch the YAML content from the URL
     const data = await fetchWithRetry(url);
