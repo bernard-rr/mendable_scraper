@@ -1,66 +1,68 @@
-import { Builder, By, until } from 'selenium-webdriver';
-import * as chrome from 'selenium-webdriver/chrome';
-import * as fs from 'fs/promises';
+import puppeteer from 'puppeteer';
+import * as fs from 'fs';
 
-(async function scrapeYoutubeChannel() {
-    const args = process.argv.slice(2);
-    if (args.length === 0) {
-        console.error('Please provide a URL as an argument.');
-        return;
-    }
-    const url = args[0];
-    const channelId = url.split('/')[4];
+const wait = (milliseconds: number) => {
+    return new Promise(resolve => setTimeout(resolve, milliseconds));
+};
 
-    const chromeOptions = new chrome.Options();
-    chromeOptions.addArguments(
-        '--headless',
-        '--disable-gpu',
-        '--no-sandbox',
-        '--disable-dev-shm-usage'
-    );
-
-    const driver = await new Builder().forBrowser('chrome').setChromeOptions(chromeOptions).build();
+export const fetchVideosFromChannel = async (channelURL: string) => {
+    const browser = await puppeteer.launch();
 
     try {
-        console.log('Navigating to the provided URL...');
-        await driver.get(url);
-        await driver.sleep(5000); // wait for 5 seconds
+        const page = await browser.newPage();
 
-        console.log('Clicking on the consent button if present...');
-        try {
-            const consentButtonXpath = "//button[@aria-label='Reject all']";
-            const consentButton = await driver.wait(until.elementLocated(By.xpath(consentButtonXpath)), 30000);
-            await consentButton.click();
-        } catch (error) {
-            console.log('Consent button not found or clicked. Moving on...');
+        if (!channelURL.endsWith('/videos')) {
+            channelURL += '/videos';
         }
 
-        let lastHeight = -1;
-        let height = await driver.executeScript("return document.documentElement.scrollHeight");
+        await page.goto(channelURL, { waitUntil: 'networkidle2' });
+
+        await wait(5000);
+
+        const consentButtonSelector = 'button[aria-label="Reject all"]';
+        if (await page.$(consentButtonSelector) !== null) {
+            await page.click(consentButtonSelector);
+        }
+
+        await wait(10000);
+
+        let height = await page.evaluate(() => document.documentElement.scrollHeight);
+        let lastHeight = 0;
 
         while (lastHeight !== height) {
-            console.log(`Scrolling to height: ${height}...`);
-            await driver.executeScript(`window.scrollTo(0, ${height});`);
-            await driver.sleep(2000);
             lastHeight = height;
-            height = await driver.executeScript("return document.documentElement.scrollHeight");
+            await page.evaluate(height => {
+                window.scrollTo(0, height);
+            }, height);
+            await wait(2000);
+            height = await page.evaluate(() => document.documentElement.scrollHeight);
         }
 
-        console.log('Collecting video links...');
-        const videoElements = await driver.findElements(By.xpath('//*[@id="video-title"]'));
-        for (const videoElement of videoElements) {
-            const link = await videoElement.getAttribute('href');
-            if (link) {
-                console.log(`Found video link: ${link}`);
-                await fs.appendFile(`${channelId}.list`, `${link}\n`);
-            } else {
-                console.log('Encountered a null video link.');
-            }
-        }
+        const videos = await page.$$eval('a[id="video-title-link"]', (elements, channelURL) => elements.map(e => ({
+            title: e.getAttribute("aria-label")?.split(" by ")[0]?.trim() || "",
+            link: "https://www.youtube.com" + e.getAttribute("href"),
+            channel: channelURL.split('/').slice(-2, -1)[0]
+        })), channelURL);
+
+        const currentDate = new Date().toISOString().split('T')[0];
+        const filename = `${videos[0].channel}_${currentDate}.json`;
+
+        fs.writeFileSync(filename, JSON.stringify(videos, null, 2));
+
+        await page.screenshot({path: 'yt.png'});
+        await browser.close();
+
+        return videos;
     } catch (error) {
-        console.error('An error occurred:', error);
-    } finally {
-        console.log('Quitting driver...');
-        await driver.quit();
+        if (error instanceof Error) {
+            console.error(`Failed to fetch videos due to error: ${error.message}`);
+        } else {
+            console.error('Failed to fetch videos due to an unknown error.');
+        }
+        await browser.close();
+        return [];
     }
-})();
+}
+
+// Example usage:
+fetchVideosFromChannel('https://www.youtube.com/@Finaius');
