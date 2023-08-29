@@ -7,8 +7,16 @@ async function fetchTranscriptsFromChannel(channelURL: string) {
         // 1. Get all the video links from the provided YouTube channel URL.
         const videos = await fetchVideosFromChannel(channelURL);
 
+        if (videos.length === 0) {
+            console.error('No videos found for the channel.');
+            return [];
+        }
+
+        // Retrieve channel name from the first video's channel property.
+        const channelName = videos[0].channel;
+
         // Store the results.
-        let results: Array<{ link: string, content: string }> = [];
+        let results: Array<{ channel: string, title: string, link: string, content: string }> = [];
 
         // 2. Loop through each video link.
         for (const video of videos) {
@@ -16,6 +24,8 @@ async function fetchTranscriptsFromChannel(channelURL: string) {
                 // 3. Get the transcript for each video link.
                 const transcriptResult = await youtubeVideoScraper(video.link);
                 results.push({
+                    channel: channelName,
+                    title: video.title,
                     link: video.link,
                     content: transcriptResult.content
                 });
@@ -25,7 +35,7 @@ async function fetchTranscriptsFromChannel(channelURL: string) {
         }
 
         // Save results to a JSON file
-        const filename = `transcripts_${new Date().toISOString().split('T')[0]}.json`;
+        const filename = `transcripts_${channelName}_${new Date().toISOString().split('T')[0]}.json`;
         fs.writeFileSync(filename, JSON.stringify(results, null, 2));
         console.log(`Results saved to ${filename}`);
 

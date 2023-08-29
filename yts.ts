@@ -49,7 +49,6 @@ export const fetchVideosFromChannel = async (channelURL: string) => {
 
         fs.writeFileSync(filename, JSON.stringify(videos, null, 2));
 
-        await page.screenshot({path: 'yt.png'});
         await browser.close();
 
         return videos;
@@ -65,4 +64,4 @@ export const fetchVideosFromChannel = async (channelURL: string) => {
 }
 
 // Example usage:
-fetchVideosFromChannel('https://www.youtube.com/@Finaius');
+fetchVideosFromChannel('https://www.youtube.com/@engineerprompt/videos');
