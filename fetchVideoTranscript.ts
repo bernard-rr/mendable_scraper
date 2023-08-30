@@ -37,5 +37,5 @@ export function isValidYoutubeURL(url: string): boolean {
 }
 
 // Example Usage
-const videoURL = 'youtube.com/watch?v=wHEIT32ZEVs';
-youtubeVideoScraper(videoURL).then(console.log).catch(console.error);
+// const videoURL = 'youtube.com/watch?v=wHEIT32ZEVs';
+// youtubeVideoScraper(videoURL).then(console.log).catch(console.error);

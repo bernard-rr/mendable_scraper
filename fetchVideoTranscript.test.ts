@@ -1,4 +1,4 @@
-import { youtubeVideoScraper, isValidYoutubeURL } from './yt';
+import { youtubeVideoScraper, isValidYoutubeURL } from './fetchVideoTranscript';
 
 import { YoutubeTranscript } from 'youtube-transcript';
 

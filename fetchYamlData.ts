@@ -52,6 +52,6 @@ export async function scrapeOpenApiYaml(url: string): Promise<Section[]> {
 }
 
 // Testing the scraper
-scrapeOpenApiYaml('https://github.com/OAI/OpenAPI-Specification/blob/main/examples/v3.0/api-with-examples.yaml').then(sections => {
-  console.log(JSON.stringify(sections, null, 2));
-});
+// scrapeOpenApiYaml('https://petstore.swagger.io/v2/swagger.yaml').then(sections => {
+//   console.log(JSON.stringify(sections, null, 2));
+// });

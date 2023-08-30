@@ -1,6 +1,6 @@
 import axios from 'axios';
 import * as yaml from 'js-yaml';
-import { fetchWithRetry, scrapeOpenApiYaml } from './yaml';
+import { fetchWithRetry, scrapeOpenApiYaml } from './fetchYamlData';
 
 // Mock axios and type it as a jest-mocked module
 jest.mock('axios');

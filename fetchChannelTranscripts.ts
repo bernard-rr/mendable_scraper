@@ -1,5 +1,5 @@
-import { fetchVideosFromChannel } from './yts';
-import { youtubeVideoScraper } from './yt';
+import { fetchVideosFromChannel } from './fetchChannelMetadata';
+import { youtubeVideoScraper } from './fetchVideoTranscript';
 import * as fs from 'fs';
 
 async function fetchTranscriptsFromChannel(channelURL: string) {
@@ -50,11 +50,11 @@ async function fetchTranscriptsFromChannel(channelURL: string) {
     }
 }
 
-// Example usage:
-fetchTranscriptsFromChannel('https://www.youtube.com/@Finaius')
-    .then(results => {
-        // Do something with the results. For now, they are saved to a file.
-    })
-    .catch(error => {
-        console.error(`Failed to fetch transcripts: ${error}`);
-    });
+// // Example usage:
+// fetchTranscriptsFromChannel('https://www.youtube.com/@Finaius')
+//     .then(results => {
+//         // Do something with the results. For now, they are saved to a file.
+//     })
+//     .catch(error => {
+//         console.error(`Failed to fetch transcripts: ${error}`);
+//     });
