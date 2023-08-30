@@ -1,6 +1,6 @@
 # Mendable Scraper Suite
 
-This repository contains utilities to fetch metadata from YouTube channels, fetch video transcripts, fetch transcripts from entire channels, and scrape data from YAML files (like OpenAPI specs).
+This repository contains utilities to fetch metadata from YouTube channels, fetch video transcripts, fetch transcripts from entire channel, and scrape data from YAML files (like OpenAPI specs).
 
 Below you'll find a description of each utility and how to use them.
 
