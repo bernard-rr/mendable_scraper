@@ -63,8 +63,6 @@ scrapeOpenApiYaml('https://petstore.swagger.io/v2/swagger.yaml').then(sections =
 
 ## Tests
 
-Testing is a crucial aspect of our development process. It ensures code reliability and robustness. Here's a guide on our testing procedures:
-
 ### **Prerequisites**
 
 Ensure you have `jest` installed globally or locally within the project:
