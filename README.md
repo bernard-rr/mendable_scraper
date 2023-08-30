@@ -11,8 +11,6 @@ Below you'll find a description of each utility and how to use them.
     - [fetchChannelTranscripts.ts](#fetchchanneltranscriptsts)
     - [fetchYamlData.ts](#fetchyamldatats)
 - [Tests](#tests)
-- [Contribute](#contribute)
-- [License](#license)
 
 ## Utilities
 
