@@ -25,7 +25,7 @@ fetchVideosFromChannel('https://www.youtube.com/@engineerprompt/videos');
 ```
 
 ### fetchVideoTranscript.ts
-This utility fetches the transcript of a given YouTube video link.
+This utility fetches the transcript of a given YouTube video link/url.
 
 #### Usage:
 ```typescript
